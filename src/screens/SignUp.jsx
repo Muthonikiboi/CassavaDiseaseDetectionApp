@@ -1,13 +1,13 @@
 import React from "react";
 import { SafeAreaView, StyleSheet ,ScrollView, Image ,View ,Text ,TextInput ,TouchableOpacity} from "react-native";
-import { Ionicons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 const SignUp=()=>{
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
     const [username, onChangeUsername] = React.useState('');
+    const [confirmPassword, onChangeConfirmPassword] = React.useState('');
 
     return(
         <SafeAreaView  style={styles.container}>
@@ -34,7 +34,7 @@ const SignUp=()=>{
                             </View>
 
                             <View style={styles.inputEmail}>
-                            <FontAwesome name="envelope-o" size={24} color="black" />
+                            <Feather name="mail" size={24} color="black" />
                                 <TextInput
                                     style={styles.input}
                                     onChangeText={onChangeEmail}
@@ -45,7 +45,7 @@ const SignUp=()=>{
                             </View>
 
                             <View style={styles.inputEmail}>
-                            <Ionicons name="lock-open-outline" size={24} color="black" />
+                            <Feather name="unlock" size={24} color="black" />
                                 <TextInput
                                     style={styles.input}
                                     onChangeText={onChangePassword}
@@ -56,11 +56,11 @@ const SignUp=()=>{
                             </View>
 
                             <View style={styles.inputEmail}>
-                            <Ionicons name="lock-open-outline" size={24} color="black" />
+                            <Feather name="lock" size={24} color="black" />
                                 <TextInput
                                     style={styles.input}
-                                    onChangeText={onChangePassword}
-                                    value={password}
+                                    onChangeText={onChangeConfirmPassword}
+                                    value={confirmPassword}
                                     placeholder="Confirm Password"
                                     placeholderTextColor="#A9A9A9"
                                 />
@@ -71,7 +71,7 @@ const SignUp=()=>{
                                 <Text style={styles.loginText}>Register</Text>
                             </TouchableOpacity>
                             <View style={styles.signUpView}>
-                                <Text style={styles.signinAccount}>Already have an account? <Text style={styles.signUp}>Log In</Text></Text>
+                                <Text style={styles.signinAccount}>Already have an account? <Text style={styles.signUp}>Sign In</Text></Text>
                             </View>
                         </View>
                     </View>
