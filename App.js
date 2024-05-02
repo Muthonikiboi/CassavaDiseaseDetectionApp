@@ -1,15 +1,16 @@
 import React from "react";
 import { StyleSheet, SafeAreaView} from "react-native";
 import Signin from "./src/screens/Signin";
-import ExampleComponent from "./src/screens/test";
+import SignUp from "./src/screens/SignUp";
 
 
 const App =()=>{
   return(
     <SafeAreaView style={styles.container}>
       {/* <ExampleComponent/> */}
+      <SignUp/>
 
-      <Signin/>
+      {/* <Signin/> */}
     </SafeAreaView>
   )
 }
