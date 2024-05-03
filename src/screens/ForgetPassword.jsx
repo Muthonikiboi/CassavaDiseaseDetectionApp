@@ -2,18 +2,17 @@ import React from "react";
 import { SafeAreaView, StyleSheet ,ScrollView, Image ,View ,Text ,TextInput ,TouchableOpacity} from "react-native";
 import { Feather } from '@expo/vector-icons';
 
-const Signin=()=>{
+const ForgotPassword=()=>{
     const [email, onChangeEmail] = React.useState('');
-    const [password, onChangePassword] = React.useState('');
 
     return(
         <SafeAreaView  style={styles.container}>
             <ScrollView>
                 <View style={styles.content}>
-                <Image style={styles.loginImage} source={require('../../assets/login.png')}/>
+                <Image style={styles.loginImage} source={require('../../assets/Forgot_password.png')}/>
                     <View style={styles.ViewContainer}>
-                        <Text style={styles.loginText1}>Login</Text>
-                        <Text style={styles.loginCommText}>Please sign in to continue</Text>
+                        <Text style={styles.loginText1}>Forgot Password?</Text>
+                        <Text style={styles.loginCommText}>Enter email address to get a link on your email to reset your password</Text>
                         <View style={styles.inputContainer}>
                             <View style={styles.inputEmail}>
                             <Feather name="mail" size={24} color="black" />
@@ -25,22 +24,11 @@ const Signin=()=>{
                                     placeholderTextColor="#A9A9A9"
                                 />
                             </View>
-                            <View style={styles.inputEmail}>
-                            <Feather name="unlock" size={24} color="black" />
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={onChangePassword}
-                                    value={password}
-                                    placeholder="Password"
-                                    placeholderTextColor="#A9A9A9"
-                                />
-                            </View>
-                            <Text style={styles.forgotPassword}>Forgot Password?</Text>
                             <TouchableOpacity style={styles.button} onPress={()=>{console.log("Logged In")}}>
-                                <Text style={styles.loginText}>Log In</Text>
+                                <Text style={styles.loginText}>Send Link</Text>
                             </TouchableOpacity>
                             <View style={styles.signUpView}>
-                                <Text style={styles.signinAccount}>Don't have an account? <Text style={styles.signUp}>Sign Up</Text></Text>
+                                <Text style={styles.signinAccount}>Already have an account? <Text style={styles.signUp}>Sign In</Text></Text>
                             </View>
                         </View>
                     </View>
@@ -55,19 +43,21 @@ const styles=StyleSheet.create({
         flex:1
     },
     loginImage:{
-        height:350,
-        width:350
+        height:360,
+        width:360
     },
     ViewContainer:{
        marginLeft:20
     },
     loginText1:{
-        fontSize:40,
-        color:'#0E593C'
+        fontSize:30,
+        color:'#0E593C',
+        marginBottom:10
     },
     loginCommText:{
-        fontSize: 16,
-        color:'black'
+        fontSize: 13,
+        color:'black',
+        marginBottom:10
     },
     input: {
         flex:1,
@@ -111,4 +101,4 @@ const styles=StyleSheet.create({
     }
 })
 
-export default Signin
+export default ForgotPassword

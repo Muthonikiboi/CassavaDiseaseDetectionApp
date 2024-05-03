@@ -3,22 +3,16 @@ import { StyleSheet, SafeAreaView} from "react-native";
 import Signin from "./src/screens/Signin";
 import SignUp from "./src/screens/SignUp";
 import PasswordReset from "./src/screens/PasswordReset";
-
+import ForgotPassword from "./src/screens/ForgetPassword";
+import SplashScreen from "./src/screens/splashScreen";
 
 const App =()=>{
-  return(
-    <SafeAreaView style={styles.container}>
-      {/* <ExampleComponent/> */}
-      {/* <SignUp/> */}
-      <PasswordReset/>
-      {/* <Signin/> */}
-    </SafeAreaView>
-  )
+  const [isLoading, setIsLoading] = React.useState(true);
+  return isLoading ? (
+    <SplashScreen setIsLoading={setIsLoading} />
+  ) : (
+    <Signin />
+  );
 }
 
-const styles=StyleSheet.create({
-  container:{
-    flex:1
-  }
-})
 export default App
