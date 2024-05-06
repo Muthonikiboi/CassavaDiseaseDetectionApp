@@ -4,7 +4,7 @@ import { SafeAreaView, View, StyleSheet, ScrollView, FlatList, Image, Dimensions
 const { width } = Dimensions.get('window');
 const imageWidth = width * 0.8; // Adjust width as needed
 
-const Description = () => {
+const MosaicDescription = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const flatListRef = useRef(null);
     const images = [
@@ -134,4 +134,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Description;
+export default MosaicDescription;

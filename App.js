@@ -5,8 +5,11 @@ import SignUp from "./src/screens/SignUp";
 import PasswordReset from "./src/screens/PasswordReset";
 import ForgotPassword from "./src/screens/ForgetPassword";
 import SplashScreen from "./src/screens/splashScreen";
-import Description from "./src/screens/Description";
+import MosaicDescription from "./src/screens/MosaicDescription";
 import Model from "./src/screens/Model";
+import Settings from "./src/screens/Settings";
+import BlightDescription from "./src/screens/BlightDescription";
+
 const App =()=>{
 //   const [isLoading, setIsLoading] = React.useState(true);
 //   return isLoading ? (
@@ -16,16 +19,19 @@ const App =()=>{
 //   );
 // }
 
+
    return(
     <SafeAreaView style={styles.container}>
       {/* <ExampleComponent/> */}
       {/* <SignUp/> */}
-      {/* <Description/> */}
+      {/* <MosaicDescription/> */}
       {/* <PasswordReset/> */}
       {/* <ForgotPassword/> */}
       {/* <SplashScreen/> */}
       {/* <Signin/> */}
-      <Model/>
+      {/* <Model/> */}
+      <Settings/>
+      {/* <BlightDescription/> */}
     </SafeAreaView>
   )
 }
