@@ -8,7 +8,7 @@ import { useState } from "react";
 const Signin=()=>{
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isloggedIn , setIsLoggedIn] =useState(false)
+    const [isloggedIn , setIsLoggedIn] =useState(false);
 
     function handleSubmit(){
         console.log(email , password);
@@ -22,15 +22,18 @@ const Signin=()=>{
                 if (res.data.status=="success"){
                     ToastAndroid.show('Log in successful', ToastAndroid.SHORT);
                     setIsLoggedIn(true)
+                }else {
+                    ToastAndroid.show('Failed to log in. Please check your credentials.', ToastAndroid.SHORT);
                 }
+            })
+            .catch(error =>{
+                console.log(error.response.data)
             })
     }
 
-
-
     return(
         <SafeAreaView  style={styles.container}>
-         { isloggedIn ? <Tabs/> : <ScrollView keyboardShouldPersistTaps={'always'} >
+         {isloggedIn ? <Tabs/> : <ScrollView keyboardShouldPersistTaps={'always'}>
                 <View style={styles.content}>
                 <Image style={styles.loginImage} source={require('../../assets/login.png')}/>
                     <View style={styles.ViewContainer}>
