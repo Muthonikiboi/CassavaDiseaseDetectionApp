@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
         flex: 1
     },
     scroll: {
-        marginTop: 50,
         marginLeft: 5,
     },
     view1:{

@@ -1,14 +1,36 @@
 import React from "react";
-import { SafeAreaView, StyleSheet ,ScrollView, Image ,View ,Text ,TextInput ,TouchableOpacity} from "react-native";
+import { SafeAreaView, StyleSheet ,ScrollView, Image ,View ,Text ,TextInput ,TouchableOpacity ,ToastAndroid} from "react-native";
 import { Feather } from '@expo/vector-icons';
+import axios from 'axios';
+import Tabs from "../components/Tabs";
+import { useState } from "react";
 
 const Signin=()=>{
-    const [email, onChangeEmail] = React.useState('');
-    const [password, onChangePassword] = React.useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isloggedIn , setIsLoggedIn] =useState(false)
+
+    function handleSubmit(){
+        console.log(email , password);
+        const userData={
+            email:email,
+            password,
+        }
+        axios
+            .post("https://apple-plant-disease.onrender.com/api/v1/user/login",userData)
+            .then(res=>{console.log(res.data)
+                if (res.data.status=="success"){
+                    ToastAndroid.show('Log in successful', ToastAndroid.SHORT);
+                    setIsLoggedIn(true)
+                }
+            })
+    }
+
+
 
     return(
         <SafeAreaView  style={styles.container}>
-            <ScrollView>
+         { isloggedIn ? <Tabs/> : <ScrollView keyboardShouldPersistTaps={'always'} >
                 <View style={styles.content}>
                 <Image style={styles.loginImage} source={require('../../assets/login.png')}/>
                     <View style={styles.ViewContainer}>
@@ -19,7 +41,7 @@ const Signin=()=>{
                             <Feather name="mail" size={24} color="black" />
                                 <TextInput
                                     style={styles.input}
-                                    onChangeText={onChangeEmail}
+                                    onChangeText={setEmail}
                                     value={email}
                                     placeholder="Email"
                                     placeholderTextColor="#A9A9A9"
@@ -29,14 +51,14 @@ const Signin=()=>{
                             <Feather name="unlock" size={24} color="black" />
                                 <TextInput
                                     style={styles.input}
-                                    onChangeText={onChangePassword}
+                                    onChangeText={setPassword}
                                     value={password}
                                     placeholder="Password"
                                     placeholderTextColor="#A9A9A9"
                                 />
                             </View>
                             <Text style={styles.forgotPassword}>Forgot Password?</Text>
-                            <TouchableOpacity style={styles.button} onPress={()=>{console.log("Logged In")}}>
+                            <TouchableOpacity style={styles.button} onPress={()=>handleSubmit()}>
                                 <Text style={styles.loginText}>Log In</Text>
                             </TouchableOpacity>
                             <View style={styles.signUpView}>
@@ -45,7 +67,7 @@ const Signin=()=>{
                         </View>
                     </View>
                 </View>
-            </ScrollView>
+            </ScrollView>}
         </SafeAreaView>
     )
 }

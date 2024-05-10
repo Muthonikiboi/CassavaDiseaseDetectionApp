@@ -64,9 +64,6 @@ const styles=StyleSheet.create({
     container:{
         flex:1
     },
-    scroll:{
-        marginTop:50
-    },
     headingView:{
         alignItems:'center',
         justifyContent:'center'
