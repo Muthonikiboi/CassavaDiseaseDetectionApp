@@ -63,6 +63,8 @@ const Settings =()=>{
 const styles=StyleSheet.create({
     container:{
         flex:1
+    },scroll:{
+        marginTop:60
     },
     headingView:{
         alignItems:'center',

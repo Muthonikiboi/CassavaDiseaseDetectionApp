@@ -11,7 +11,8 @@ const Tabs = () => {
   return (
     <Tab.Navigator screenOptions={{
       tabBarActiveTintColor: '#0E593C',
-      tabBarInactiveTintColor: 'black'
+      tabBarInactiveTintColor: 'black',
+      headerShown:false
     }}>
       <Tab.Screen
         name="Model"

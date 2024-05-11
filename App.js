@@ -1,24 +1,28 @@
 import React from "react";
-import Signin from "./src/screens/Signin";
 import SplashScreen from "./src/screens/splashScreen";
 import { NavigationContainer } from "@react-navigation/native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import SignUp from "./src/screens/SignUp";
+import Signin from "./src/screens/Signin"; 
+import { createStackNavigator } from '@react-navigation/stack';
 
-const App =()=>{
+const App = () => {
+  const Stack = createStackNavigator();
   const [isLoading, setIsLoading] = React.useState(true);
+  
   return isLoading ? (
     <SplashScreen setIsLoading={setIsLoading} />
-     ) : (
-      <NavigationContainer>
-        <Signin />
-      </NavigationContainer>)
+  ) : (
+    <NavigationContainer>
+      <Stack.Navigator
+      screenOptions={{
+        headerShown:false,
+      }}
+      >
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="SignIn" component={Signin} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
-  //   return(
-  //   <SafeAreaView style={{flex:1}}>
-  //     <SignUp/>
-  //   </SafeAreaView>
-  // );
-}
-
-export default App
+export default App;

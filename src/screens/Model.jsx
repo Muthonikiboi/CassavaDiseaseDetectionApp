@@ -1,12 +1,62 @@
-
 import React from "react";
-import { ScrollView, View, SafeAreaView, StyleSheet, Text, Image ,ImageBackground, TouchableOpacity} from "react-native";
+import { ScrollView, View, SafeAreaView, StyleSheet, Text, Image ,ImageBackground, TouchableOpacity , Modal , Alert } from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
+import { useState } from "react";
+import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from '@expo/vector-icons';
 
 const Model = () => {
+
+    const [image, setImage] = useState(null);
+    const [modalVisible , setModalVisible]=useState(false)
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log("ImagePicker result:", result); 
+
+        if (!result.cancelled) {
+            setImage(result.assets[0].uri);
+            // Show the modal when the image is selected
+            setModalVisible(true);
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={()=>{
+                    Alert.alert("Modal has been closed.")
+                }}
+            >
+                <View style={styles.main}>
+                    <Ionicons name="close" size={30} color="white" onPress={()=>setModalVisible(!modalVisible)}/>
+                    <View style={styles.modalView}>
+                        <Text style={{fontSize:30,fontWeight:"bold"}}>Load Your Image</Text>
+                        {image && <Image source={{uri: image}} style={{width: 300, height: 250 ,borderRadius:20}} />}
+                        
+                        {/* Display the selected image if available */}
+                        <TouchableOpacity style={styles.predict}>
+                            <Text style={styles.predictText}>Predict</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
+            {modalVisible && (
+                <View style={styles.faintTint} />
+            )}
+
+
             <ScrollView style={styles.scroll}>
                 <View style={styles.view1}>
                     <View style={styles.logoView}>
@@ -51,7 +101,7 @@ const Model = () => {
                             <Text style={styles.iconText}>Get Diagnosis</Text>
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.button} onPress={()=>{console.log("Upload Successful")}}>
+                    <TouchableOpacity style={styles.button} onPress={pickImage}>
                                 <Text style={styles.loginText}>Upload Image</Text>
                     </TouchableOpacity>
 
@@ -66,7 +116,7 @@ const Model = () => {
                             <Text style={styles.iconText}>Get Diagnosis</Text>
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.button} onPress={()=>{console.log("Photo taken successfully")}}>
+                    <TouchableOpacity style={styles.button}>
                                 <Text style={styles.loginText}>Take Photo</Text>
                     </TouchableOpacity>
                 </View>
@@ -80,6 +130,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     scroll: {
+        marginTop:60,
         marginLeft: 5,
     },
     view1:{
@@ -200,6 +251,48 @@ const styles = StyleSheet.create({
     loginText:{
         color:"white",
         fontSize:16
+    },
+    modalView: {
+        margin: 0,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        height:600
+      },
+    predict:{
+        marginTop:10,
+        borderRadius:20,
+        padding:5,
+        elevation:2,
+        backgroundColor:'#0E593C',
+        width:150,
+        height:35,
+        alignItems:"center",
+        justifyContent:'center',
+    },
+    predictText:{
+        fontSize:20,
+        color: 'white',
+        fontWeight: 'bold',    
+    },
+    main:{
+        marginTop:20,
+        height:200,
+        marginLeft:15,
+        marginRight:15
+    },faintTint: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Semi-transparent black background
+        zIndex: 6, // Ensure the tint is behind the modal
     },
 })
 
