@@ -11,7 +11,7 @@ const Signin = ({ navigation }) => {
     const [isloggedIn, setIsLoggedIn] = useState(false);
 
     function handleSubmit() {
-        console.log(email, password);
+        // console.log(email, password);
         const userData = {
             email: email,
             password,
@@ -19,7 +19,7 @@ const Signin = ({ navigation }) => {
         axios
             .post("https://apple-plant-disease.onrender.com/api/v1/user/login", userData)
             .then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 if (res.data.status == "success") {
                     ToastAndroid.show('Log in successful', ToastAndroid.SHORT);
                     setIsLoggedIn(true)

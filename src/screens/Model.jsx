@@ -1,15 +1,13 @@
-import React from "react";
-import { ScrollView, View, SafeAreaView, StyleSheet, Text, Image ,ImageBackground, TouchableOpacity , Modal , Alert } from "react-native";
+import React, { useState} from "react";
+import { ScrollView, View, SafeAreaView, StyleSheet, Text, Image, ImageBackground, TouchableOpacity, Modal, Alert ,ToastAndroid} from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 
 const Model = () => {
-
     const [image, setImage] = useState(null);
-    const [modalVisible , setModalVisible]=useState(false)
+    const [modalVisible, setModalVisible] = useState(false);
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -19,12 +17,14 @@ const Model = () => {
             quality: 1,
         });
 
-        console.log("ImagePicker result:", result); 
+        // console.log("ImagePicker result:", result); 
 
         if (!result.cancelled) {
             setImage(result.assets[0].uri);
             // Show the modal when the image is selected
             setModalVisible(true);
+        }else{
+            ToastAndroid.show("You've not selected any image", ToastAndroid.SHORT)
         }
     };
 
@@ -105,7 +105,7 @@ const Model = () => {
                                 <Text style={styles.loginText}>Upload Image</Text>
                     </TouchableOpacity>
 
-                    <View style={styles.iconView}>
+                    {/* <View style={styles.iconView}>
                         <View style={styles.iconContainer}>
                             <FontAwesome6 name="upload" size={30} color="black"/>
                             <Text style={styles.iconText}>Take Photo</Text>
@@ -118,12 +118,15 @@ const Model = () => {
                     </View>
                     <TouchableOpacity style={styles.button}>
                                 <Text style={styles.loginText}>Take Photo</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </ScrollView>
         </SafeAreaView>
     )
 }
+
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -157,7 +160,8 @@ const styles = StyleSheet.create({
     view2: {
         height: 70,
         marginBottom: 8,
-        marginLeft:15
+        marginLeft:18,
+        marginTop:13
     },
     hello:{
         fontSize: 30
@@ -174,6 +178,7 @@ const styles = StyleSheet.create({
         height: 150,
         marginBottom: 8,
         flexDirection: 'row',
+        marginTop:15
     },
     backgroundImage: {
         flex: 1,
@@ -189,7 +194,8 @@ const styles = StyleSheet.create({
         textShadowRadius: 2,
     },
     view4: {
-        height: 265
+        height: 150,
+        marginTop:15
     },
     mosaic:{
         height:120,
@@ -216,6 +222,7 @@ const styles = StyleSheet.create({
         color: '#0E593C',
         fontSize: 24,
         fontWeight: "bold",
+        marginTop:30
     },
     iconView: {
         flexDirection: 'row',
@@ -246,7 +253,7 @@ const styles = StyleSheet.create({
         borderRadius:20,
         justifyContent:"center",
         alignItems:"center",
-        marginTop:10
+        marginTop:15
     },
     loginText:{
         color:"white",
@@ -291,7 +298,7 @@ const styles = StyleSheet.create({
         marginRight:15
     },faintTint: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Semi-transparent black background
+        backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent black background
         zIndex: 6, // Ensure the tint is behind the modal
     },
 })
