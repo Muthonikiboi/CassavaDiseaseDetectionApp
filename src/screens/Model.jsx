@@ -4,27 +4,68 @@ import { Entypo } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import axios from "axios";
+
 
 const Model = () => {
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
+    const [predicted, setPredicted] = useState('');
+    const [confidence, setConfidence] = useState(null);
 
     const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
+        try{
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+            });
+    
+            // console.log("ImagePicker result:", result); 
+    
+            if (!result.canceled) {
+                setImage(result.assets[0].uri);
+                // Show the modal when the image is selected
+                setModalVisible(true);
 
-        // console.log("ImagePicker result:", result); 
+                const { uri } = result.assets[0];
+                if (!uri) {
+                    console.warn('No image URI found in the result');
+                    return;
+                }
 
-        if (!result.cancelled) {
-            setImage(result.assets[0].uri);
-            // Show the modal when the image is selected
-            setModalVisible(true);
-        }else{
-            ToastAndroid.show("You've not selected any image", ToastAndroid.SHORT)
+                console.log("Image has been selected");
+                const formData = new FormData();
+
+                formData.append('file', {
+                    uri: uri,
+                    type: result.assets[0].mimeType,
+                    name: "cassava.png",
+                });
+
+                const config = {
+                    method: 'post',
+                    url: 'https://cassavamodel-fastapi.onrender.com/predict',
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    data: formData
+                };
+
+                const response = await axios(config);
+                console.log(JSON.stringify(response.data, null, 2));
+
+                // Store the API response data in the state
+                    setPredicted(response.data.Predicted);
+                    setConfidence(response.data.Confidence);
+
+            }else{
+                ToastAndroid.show("You've not selected any image", ToastAndroid.SHORT)
+            }
+        }
+        catch(error){
+            console.error("Error", error);
         }
     };
 
@@ -45,9 +86,11 @@ const Model = () => {
                         {image && <Image source={{uri: image}} style={{width: 300, height: 250 ,borderRadius:20}} />}
                         
                         {/* Display the selected image if available */}
-                        <TouchableOpacity style={styles.predict}>
-                            <Text style={styles.predictText}>Predict</Text>
-                        </TouchableOpacity>
+                        {/* <TouchableOpacity style={styles.predict}>
+                            <Text style={styles.predictText} onPress={handleImageUpload}>Predict</Text>
+                        </TouchableOpacity> */}
+                        <Text style={styles.predicts}>Predicted:<Text style={styles.predict}>{predicted}</Text></Text>
+                        <Text style={{fontSize:13 ,color:'red'}}>Confidence:{confidence}</Text>
                     </View>
                 </View>
             </Modal>
@@ -301,6 +344,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent black background
         zIndex: 6, // Ensure the tint is behind the modal
     },
+    predicts:{
+        fontSize:15,
+        marginTop:15,
+        color:'#0E593C',
+        fontWeight:'bold'
+    },
+    predict:{
+        color:"black",
+        textDecorationLine:"none"
+    }
 })
 
 export default Model;

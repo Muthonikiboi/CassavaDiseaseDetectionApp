@@ -11,7 +11,7 @@ const Signin = ({ navigation }) => {
     const [isloggedIn, setIsLoggedIn] = useState(false);
 
     function handleSubmit() {
-        // console.log(email, password);
+        console.log(email, password);
         const userData = {
             email: email,
             password,

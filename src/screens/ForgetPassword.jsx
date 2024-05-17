@@ -1,9 +1,30 @@
 import React from "react";
-import { SafeAreaView, StyleSheet ,ScrollView, Image ,View ,Text ,TextInput ,TouchableOpacity} from "react-native";
+import { SafeAreaView, StyleSheet ,ScrollView, Image ,View ,Text ,TextInput ,TouchableOpacity ,ToastAndroid} from "react-native";
 import { Feather } from '@expo/vector-icons';
+import axios from "axios";
 
 const ForgotPassword=()=>{
     const [email, onChangeEmail] = React.useState('');
+
+    function forgetPasswordBtn(){
+        console.log(email);
+        const userData={
+            email:email,
+        }
+        axios
+        .post("https://apple-plant-disease.onrender.com/api/v1/user/forgotPassword",userData)
+        .then(res => {
+            console.log(res.data)
+            if (res.data.status ==="success") {
+                ToastAndroid.show('Check Link on Your Email', ToastAndroid.SHORT);
+            } else {
+                ToastAndroid.show('Wrong Email Address. Please check your credentials.', ToastAndroid.SHORT);
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
 
     return(
         <SafeAreaView  style={styles.container}>
@@ -24,7 +45,7 @@ const ForgotPassword=()=>{
                                     placeholderTextColor="#A9A9A9"
                                 />
                             </View>
-                            <TouchableOpacity style={styles.button} onPress={()=>{console.log("Logged In")}}>
+                            <TouchableOpacity style={styles.button} onPress={forgetPasswordBtn}>
                                 <Text style={styles.loginText}>Send Link</Text>
                             </TouchableOpacity>
                             <View style={styles.signUpView}>
