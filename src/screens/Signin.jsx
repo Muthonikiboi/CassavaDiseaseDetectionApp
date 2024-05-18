@@ -17,7 +17,7 @@ const Signin = ({ navigation }) => {
             password,
         }
         axios
-            .post("https://apple-plant-disease.onrender.com/api/v1/user/login", userData)
+            .post("https://cassavabackend.onrender.com/api/v1/user/login", userData)
             .then(res => {
                 // console.log(res.data)
                 if (res.data.status == "success") {

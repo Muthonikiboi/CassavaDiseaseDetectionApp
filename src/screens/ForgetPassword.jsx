@@ -12,7 +12,7 @@ const ForgotPassword=()=>{
             email:email,
         }
         axios
-        .post("https://apple-plant-disease.onrender.com/api/v1/user/forgotPassword",userData)
+        .post("https://cassavabackend.onrender.com/api/v1/user/forgotPassword",userData)
         .then(res => {
             console.log(res.data)
             if (res.data.status ==="success") {

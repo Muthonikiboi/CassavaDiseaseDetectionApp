@@ -42,7 +42,7 @@ const PasswordReset=()=>{
             passwordConfirm:  passwordConfirm,
             token: token
         };
-        axios.patch(`https://apple-plant-disease.onrender.com/api/v1/user/resetPassword/${token}`, resetUserPassword)
+        axios.patch(`https://cassavabackend.onrender.com/api/v1/user/resetPassword/${token}`, resetUserPassword)
             .then(response => {
                 console.log(JSON.stringify(response.data, null, 2));
 

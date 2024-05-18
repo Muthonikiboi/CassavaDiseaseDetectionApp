@@ -45,7 +45,7 @@ const SignUp=()=>{
             passwordConfirm:confirmPassword
         }
         axios 
-        .post("https://apple-plant-disease.onrender.com/api/v1/user/signup",userRegistrationData)
+        .post("https://cassavabackend.onrender.com/api/v1/user/signup",userRegistrationData)
         .then(res=>{console.log(res.data)
             if(res.data.status=="success"){
                 ToastAndroid.show('You have Registered Successfully!', ToastAndroid.SHORT);
