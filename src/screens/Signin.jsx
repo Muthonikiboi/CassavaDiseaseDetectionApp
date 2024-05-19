@@ -11,6 +11,12 @@ const Signin = ({ navigation }) => {
     const [isloggedIn, setIsLoggedIn] = useState(false);
 
     function handleSubmit() {
+
+        if (!email || !password || !email.trim()=== '' || !password.trim()=== '') {
+            ToastAndroid.show('Please fill in all fields', ToastAndroid.SHORT);
+            return;
+        }
+
         console.log(email, password);
         const userData = {
             email: email,

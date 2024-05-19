@@ -21,7 +21,7 @@ const SignUp=()=>{
 
     function handleSubmit(){
 
-        if (!email || !password || !username || !confirmPassword) {
+        if (!email || !password || !username || !confirmPassword || !email.trim()=== '' || !username.trim()=== '' || !password.trim()=== '' || !confirmPassword.trim()=== '') {
             ToastAndroid.show('Please fill in all fields', ToastAndroid.SHORT);
             return;
         }
