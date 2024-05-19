@@ -34,7 +34,8 @@ const Signin = ({ navigation }) => {
                 }
             })
             .catch(error => {
-                console.log(error.response.data)
+                console.log(error.response.data.message);
+                ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
             })
     }
 
