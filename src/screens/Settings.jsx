@@ -110,7 +110,7 @@ const styles=StyleSheet.create({
     },
     button1:{
         flex:1,
-        height: 40,
+        height: 45,
         margin: 12,
         padding: 10,
         backgroundColor:'#0E593C',

@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet ,ScrollView, Image ,View ,Text ,TextInput ,Tou
 import { Feather } from '@expo/vector-icons';
 import axios from "axios";
 
-const ForgotPassword=()=>{
+const ForgotPassword=({navigation})=>{
     const [email, onChangeEmail] = React.useState('');
 
     function forgetPasswordBtn(){
@@ -31,7 +31,7 @@ const ForgotPassword=()=>{
         <SafeAreaView  style={styles.container}>
             <ScrollView>
                 <View style={styles.content}>
-                <Image style={styles.loginImage} source={require('../../assets/Forgot_password.png')}/>
+                <Image style={styles.loginImage} source={require('../../assets/Forget_password.png')}/>
                     <View style={styles.ViewContainer}>
                         <Text style={styles.loginText1}>Forgot Password?</Text>
                         <Text style={styles.loginCommText}>Enter email address to get a link on your email to reset your password</Text>
@@ -50,7 +50,7 @@ const ForgotPassword=()=>{
                                 <Text style={styles.loginText}>Send Link</Text>
                             </TouchableOpacity>
                             <View style={styles.signUpView}>
-                                <Text style={styles.signinAccount}>Already have an account? <Text style={styles.signUp}>Sign In</Text></Text>
+                                <Text style={styles.signinAccount}>Already have an account? <Text style={styles.signUp} onPress={() => navigation.navigate('SignIn')}>Sign In</Text></Text>
                             </View>
                         </View>
                     </View>
@@ -96,7 +96,7 @@ const styles=StyleSheet.create({
     },
     forgotPassword:{
         marginLeft:230,
-        color:"#0E593C"
+        color:'#0E593C'
     },
     button:{
         flex:1,

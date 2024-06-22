@@ -68,13 +68,13 @@ const Signin = ({ navigation }) => {
                                     placeholderTextColor="#A9A9A9"
                                 />
                             </View>
-                            <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                            <Text style={styles.forgotPassword} onPress={() => navigation.navigate('forgetPassword')}>Forgot Password?</Text>
                             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                                 <Text style={styles.loginText}>Log In</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
                                 <View style={styles.signUpView}>
-                                    <Text style={styles.signinAccount}>Don't have an account? <Link href="/SignUp">Sign Up</Link></Text>
+                                    <Text style={styles.signinAccount}>Don't have an account? <Text style={styles.signUp} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text></Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     },
     forgotPassword: {
         marginLeft: 230,
-        color: "#0E593C"
+        color: '#0E593C'
     },
     button: {
         flex: 1,

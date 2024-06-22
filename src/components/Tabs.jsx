@@ -33,3 +33,6 @@ const Tabs = () => {
 }
 
 export default Tabs;
+
+
+// '#0E593C'

@@ -4,14 +4,12 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import axios from "axios";
 import { useState } from "react";
-import Signin from "./Signin";
 
-const SignUp=()=>{
+const SignUp=({navigation})=>{
     const [email, onChangeEmail] = useState('');
     const [password, onChangePassword] =useState('');
     const [username, onChangeUsername] = useState('');
     const [confirmPassword, onChangeConfirmPassword] =useState('');
-    const [isregistered ,setIsRegistered ]=useState(false);
 
 
     function validateEmail(email) {
@@ -55,13 +53,13 @@ const SignUp=()=>{
             }
         })
         .catch(error =>{
-            console.log(error.response.data)
+            console.log(error.response.data.message);
+            ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
         })
     }
 
     return(
         <SafeAreaView  style={styles.container}>
-            {isregistered ?(
                             <ScrollView style={styles.scroll}>
                             <View style={styles.content}>
                                 <View style={styles.imageView}>
@@ -116,25 +114,25 @@ const SignUp=()=>{
                                             />
                                         </View>
                                        
-                                        <Text style={styles.registration}>By registeriong you agree to our<Text style={styles.forgotPassword}> Terms and Conditions</Text></Text>
+                                        <Text style={styles.registration}>By registering you agree to our<Text> Terms and Conditions</Text></Text>
                                         <TouchableOpacity style={styles.button} onPress={()=>handleSubmit()}>
                                             <Text style={styles.loginText}>Register</Text>
                                         </TouchableOpacity>
                                         <View style={styles.signUpView}>
-                                            <Text style={styles.signinAccount}>Already have an account? <Text style={styles.signUp}>Sign In</Text></Text>
+                                            <Text style={styles.signinAccount}>Already have an account? <Text style={styles.signUp} onPress={() => navigation.navigate('SignIn')}>Sign In</Text></Text>
                                         </View>
                                     </View>
                                 </View>
                             </View>
                         </ScrollView>
-            ):(<Signin/>)
-            } 
-
         </SafeAreaView>
     )
 }
 
 const styles=StyleSheet.create({
+    scroll:{
+        marginTop:30,
+    },
     container:{
         flex:1
     },
@@ -165,14 +163,14 @@ const styles=StyleSheet.create({
     inputEmail:{
         flexDirection: 'row',
         alignItems: 'center',
-        borderColor: '#A9A9A9',
+        borderColor: '#0E593C',
     },
     registration:{
         fontSize:11,
         marginLeft:50,
     },
     forgotPassword:{
-        color:"#0E593C",
+        color:'#0E593C',
         textDecorationLine:"underline"
     },
     button:{
