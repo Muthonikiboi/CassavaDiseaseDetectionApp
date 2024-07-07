@@ -7,8 +7,7 @@ import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
-
-const Settings =()=>{
+const Settings =({navigation})=>{
     return(
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scroll}>
@@ -16,7 +15,7 @@ const Settings =()=>{
                     <Text style={styles.heading}>Settings</Text>
                 </View>
                 <View style={styles.view1}>
-                <AntDesign name="arrowleft" size={24} color="black" />
+                <AntDesign name="arrowleft" size={24} marginRight={10} marginLeft={10} color="black" onPress={() => navigation.navigate('Model')}/>
                 <Text style={{fontSize:25, marginRight:120}}>Account</Text>
                 <TouchableOpacity style={styles.button} onPress={()=>{console.log("Log Out Successful")}}>
                     <Text style={styles.loginText}>Log Out</Text>
@@ -128,5 +127,6 @@ const styles=StyleSheet.create({
         marginRight:10
     }
 })
+
 
 export default Settings
