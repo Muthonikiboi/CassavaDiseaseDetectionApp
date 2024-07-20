@@ -4,9 +4,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import SignUp from "./src/screens/SignUp";
 import Signin from "./src/screens/Signin"; 
 import PasswordReset from "./src/screens/PasswordReset";
+import BlightDescription from "./src/screens/BlightDescription";
+import MosaicDescription from "./src/screens/MosaicDescription";
+import Model from "./src/screens/Model";
+import Cam from "./src/screens/Camera";
 import ForgetPassword from  "./src/screens/ForgetPassword";
 import { createStackNavigator } from '@react-navigation/stack';
-import {StyleSheet} from "react-native";
+import {StyleSheet, SafeAreaView} from "react-native";
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -29,22 +33,24 @@ const App = () => {
         headerShown:false,
       }}
       >
-        <Stack.Screen name="SignUp" component={SignUp}/>
         <Stack.Screen name="SignIn" component={Signin}/>
+        <Stack.Screen name="SignUp" component={SignUp}/>
         <Stack.Screen name="PasswordReset" component={PasswordReset}/>
         <Stack.Screen name="forgetPassword" component={ForgetPassword}/>
-        {/* <Stack.Screen name="MosaicDescription" component={MosaicDescription}/>
-        <Stack.Screen name="BlightDecription" component={BlightDescription}/> */}
+        <Stack.Screen name="Model" component={Model}/>
+        <Stack.Screen name="Camera" component={Cam}/>
+        <Stack.Screen name="MosaicDescription" component={MosaicDescription}/>
+        <Stack.Screen name="BlightDecription" component={BlightDescription}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
   
-  // return(
-  //   <SafeAreaView style={styles.container}>
-  //     {/* <ForgetPassword/> */}
-  //     <MosaicDescription/>
-  //   </SafeAreaView>
-  // )
+//   return(
+//     <SafeAreaView style={styles.container}>
+//       {/* <ForgetPassword/> */}
+//       <Cam/>
+//     </SafeAreaView>
+//   )
 };
 
 const styles=StyleSheet.create({

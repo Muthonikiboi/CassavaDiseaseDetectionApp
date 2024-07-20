@@ -36,7 +36,7 @@ const Settings =({navigation})=>{
                         <Fontisto name="email" size={30} color='#0E593C' />
                         <Text style={{fontSize:16,marginLeft:20 ,color:'#0E593C'}}>Email</Text>
                         </View>
-                        <Text style={{marginLeft:50, fontSize:25}}>kiboijoye254@gmail.com</Text>
+                        <Text style={{marginLeft:50, fontSize:20}}>kiboijoye254@gmail.com</Text>
                     </View>
 
                     <View style={styles.main}>

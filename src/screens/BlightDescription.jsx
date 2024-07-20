@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { SafeAreaView, View, StyleSheet, ScrollView, FlatList, Image, Dimensions ,Text} from "react-native";
+import { AntDesign } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 const imageWidth = width * 0.8; // Adjust width as needed
 
-const BlightDescription = () => {
+const BlightDescription = ({navigation}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const flatListRef = useRef(null);
     const images = [
@@ -46,7 +47,10 @@ const BlightDescription = () => {
         <SafeAreaView style={styles.container}>
             <View style={styles.scroll}>
 
-                <View style={styles.titleView}><Text style={styles.title}>Cassava Blight Disease</Text></View>
+                <View style={styles.titleView}>
+                   <AntDesign name="arrowleft" size={24} marginRight={10} marginLeft={10} color="black" onPress={() => navigation.navigate('Model')}/>
+                    <Text style={styles.title}>Cassava Blight Disease</Text>
+                    </View>
 
                 <View style={styles.view1}>
                     <FlatList
@@ -119,8 +123,10 @@ const styles = StyleSheet.create({
         fontSize:30
     },
     titleView:{
-        alignItems:'center',
-        marginBottom:10
+        alignItems:"center",
+        flexDirection:'row',
+        marginBottom:10,
+        marginLeft:5
     },
     subTitles:{
         color:'#0E593C',
