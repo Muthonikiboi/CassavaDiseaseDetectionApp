@@ -1,5 +1,7 @@
-import React from "react";
-import { SafeAreaView ,ScrollView, StyleSheet, Text,View ,TouchableOpacity} from "react-native";
+import React, { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView ,ScrollView, StyleSheet, Text,View ,TouchableOpacity,ToastAndroid} from "react-native";
+import axios from 'axios';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
@@ -8,6 +10,89 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
 const Settings =({navigation})=>{
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [role, setRole] = useState('');
+    const [userId, setUserId] = useState('');
+    const [token, setToken] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    // Fetch user details from AsyncStorage
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const email = await AsyncStorage.getItem('userEmail');
+                const username = await AsyncStorage.getItem('userName');
+                const role = await AsyncStorage.getItem('userRole');
+                const userId = await AsyncStorage.getItem('id');
+                const token = await AsyncStorage.getItem('token');
+
+                if (email !== null) setEmail(email);
+                if (username !== null) setUsername(username);
+                if (role !== null) setRole(role);
+                if (userId !== null) setUserId(userId);
+                if (token !== null) setToken(token);
+            } catch (error) {
+                console.error('Error fetching user details', error);
+            } finally {
+                setLoading(false); // Set loading to false once the fetching is done
+            }
+        };
+
+        fetchUserDetails();
+    }, []);
+
+    // Function to logout the user
+    const logOut = async () => {
+        try {
+            ToastAndroid.show('Logged out successfully!', ToastAndroid.SHORT);
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'SignIn' }],  
+        });
+            await AsyncStorage.multiRemove(['isLocked', 'token', 'userEmail', 'userName', 'userRole', 'id']);
+        } catch (error) {
+            console.error('Error during logout', error);
+            ToastAndroid.show('Error during logout', ToastAndroid.SHORT);
+        }
+    };
+
+    // Function to delete the account
+    const deleteAccount = async () => {
+        try {
+
+            if (!token) {
+                ToastAndroid.show('User is not authenticated', ToastAndroid.SHORT);
+                return;
+            }
+    
+            const response = await axios.delete(`https://cassavabackend.onrender.com/api/v1/user/softDelete/${userId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+    
+            if (response.data.status === 'success') {
+                ToastAndroid.show('Account deleted successfully!', ToastAndroid.SHORT);
+    
+                // Remove all stored user information
+                await AsyncStorage.multiRemove(['isLocked', 'token', 'userEmail', 'userName', 'userRole', 'id']);
+    
+                // Navigate to Login screen
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'SignIn' }],
+                });
+            } else {
+                ToastAndroid.show('Error deleting account', ToastAndroid.SHORT);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            ToastAndroid.show('Error deleting account', ToastAndroid.SHORT);
+        }
+    };
+
     return(
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scroll}>
@@ -16,9 +101,9 @@ const Settings =({navigation})=>{
                 </View>
                 <View style={styles.view1}>
                 <AntDesign name="arrowleft" size={24} marginRight={10} marginLeft={10} color="black" onPress={() => navigation.navigate('Model')}/>
-                <Text style={{fontSize:25, marginRight:120}}>Account</Text>
-                <TouchableOpacity style={styles.button} onPress={()=>{console.log("Log Out Successful")}}>
-                    <Text style={styles.loginText}>Log Out</Text>
+                <Text style={{fontSize:25, marginRight:100}}>Account</Text>
+                <TouchableOpacity style={styles.button} onPress={logOut}>
+                    <Text style={styles.loginText} >Log Out</Text>
                     <Entypo name="log-out" size={15} color="white" />
                 </TouchableOpacity>
                 </View>
@@ -26,30 +111,30 @@ const Settings =({navigation})=>{
                     <View style={styles.main}>
                         <View style={{height:50 ,alignItems:'center',marginLeft:20 ,flexDirection:'row'}}>
                         <Feather name="user" size={30} color='#0E593C' />
-                        <Text style={{fontSize:16,marginLeft:20 ,color:'#0E593C'}}>Username</Text>
+                        <Text style={{fontSize:20,marginLeft:20 ,color:'#0E593C'}}>Username</Text>
                         </View>
-                        <Text style={{marginLeft:50, fontSize:25}}>JoyElizabeth Muthoni Kiboi</Text>
+                        <Text style={{marginLeft:50, fontSize:16}}>{username}</Text>
                     </View>
 
                     <View style={styles.main}>
                         <View style={{height:50 ,alignItems:'center',marginLeft:20 ,flexDirection:'row'}}>
                         <Fontisto name="email" size={30} color='#0E593C' />
-                        <Text style={{fontSize:16,marginLeft:20 ,color:'#0E593C'}}>Email</Text>
+                        <Text style={{fontSize:20,marginLeft:20 ,color:'#0E593C'}}>Email</Text>
                         </View>
-                        <Text style={{marginLeft:50, fontSize:20}}>kiboijoye254@gmail.com</Text>
+                        <Text style={{marginLeft:50, fontSize:16}}>{email}</Text>
                     </View>
 
                     <View style={styles.main}>
                         <View style={{height:50 ,alignItems:'center',marginLeft:20 ,flexDirection:'row'}}>
                         <FontAwesome name="user-circle" size={30} color='#0E593C' />
-                        <Text style={{fontSize:16,marginLeft:20 ,color:'#0E593C'}}>Role</Text>
+                        <Text style={{fontSize:20,marginLeft:20 ,color:'#0E593C'}}>Role</Text>
                         </View>
-                        <Text style={{marginLeft:50, fontSize:25}}>User</Text>
+                        <Text style={{marginLeft:50, fontSize:16}}>User</Text>
                     </View>
                 </View>
 
                 <View style={styles.deleteView}>
-                <TouchableOpacity style={styles.button1} onPress={()=>{console.log("Account Deleted Successfully")}}>
+                <TouchableOpacity style={styles.button1} onPress={deleteAccount}>
                     <Text style={styles.loginTxt}>Delete Account</Text>
                     <MaterialCommunityIcons name="delete-outline" size={23} color="white" />
                 </TouchableOpacity>
@@ -88,7 +173,7 @@ const styles=StyleSheet.create({
         borderRadius:20,
         justifyContent:"center",
         alignItems:"center",
-        flexDirection:'row'
+        flexDirection:'row',
     },
     loginText:{
         color:"white",
@@ -113,13 +198,13 @@ const styles=StyleSheet.create({
         margin: 12,
         padding: 10,
         backgroundColor:'#0E593C',
-        borderRadius:20,
+        borderRadius:30,
         justifyContent:"center",
         alignItems:"center",
         marginTop:40,
-        marginLeft:55,
+        marginLeft:80,
         flexDirection:'row',
-        width:250
+        width:200
     },
     loginTxt:{
         color:"white",

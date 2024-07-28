@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { SafeAreaView, View, StyleSheet, ScrollView, FlatList, Image, Dimensions ,Text} from "react-native";
+import { AntDesign } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 const imageWidth = width * 0.8; // Adjust width as needed
@@ -46,7 +47,10 @@ const MosaicDescription = () => {
         <SafeAreaView style={styles.container}>
             <View style={styles.scroll}>
 
-                <View style={styles.titleView}><Text style={styles.title}>Cassava Mosaic Disease</Text></View>
+            <View style={styles.titleView}>
+                   <AntDesign name="arrowleft" size={24} marginRight={10} marginLeft={10} color="black" onPress={() => navigation.navigate('Model')}/>
+                    <Text style={styles.title}>Cassava Blight Disease</Text>
+                    </View>
 
                 <View style={styles.view1}>
                     <FlatList

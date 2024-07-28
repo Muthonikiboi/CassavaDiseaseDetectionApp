@@ -7,7 +7,18 @@ const ForgotPassword=({navigation})=>{
     const [email, onChangeEmail] = React.useState('');
 
     function forgetPasswordBtn(){
-        console.log(email);
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email || !emailRegex.test(email)) {
+            ToastAndroid.show("Invalid email", ToastAndroid.SHORT);
+            return;
+        }
+
+        // function to redirect to the password reset page
+        const redirectToReset = function(){
+            navigation.navigate('PasswordReset');
+        }
+
         const userData={
             email:email,
         }
@@ -17,13 +28,14 @@ const ForgotPassword=({navigation})=>{
             console.log(res.data)
             if (res.data.status ==="success") {
                 ToastAndroid.show('Check Link on Your Email', ToastAndroid.SHORT);
+                redirectToReset();
             } else {
                 ToastAndroid.show('Wrong Email Address. Please check your credentials.', ToastAndroid.SHORT);
             }
         })
         .catch(error => {
-            console.log(error.response.data.message);
-            ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
+            console.log(error.response.data.data.message);
+            ToastAndroid.show(error.response.data.data.message, ToastAndroid.SHORT);
         })
     }
 

@@ -6,13 +6,15 @@ import { MaterialIcons } from '@expo/vector-icons';
 import axios from "axios";
 
 
-const PasswordReset=()=>{
+const PasswordReset=({navigation})=>{
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [token, setToken] = useState('');
     
 
     const resetPassword= () => {
+
+
         if (!token || !token.trim()=== ''){
             ToastAndroid.show("Input Token",ToastAndroid.SHORT)
             return;
@@ -37,6 +39,11 @@ const PasswordReset=()=>{
             ToastAndroid.show("Token should be more than 8 characters", ToastAndroid.SHORT)
             return;
         }
+
+                // function to redirect to the password reset page
+                const redirectToReset = function(){
+                    navigation.navigate('SignIn');
+                }
         const resetUserPassword ={
             password:  password,
             passwordConfirm:  passwordConfirm,
@@ -48,6 +55,7 @@ const PasswordReset=()=>{
 
                 if (response.data.status ==='success') {
                     ToastAndroid.show('Password reset successfully!', ToastAndroid.SHORT);
+                    redirectToReset();
                 } else {
                     ToastAndroid.show('Password reset failed!', ToastAndroid.SHORT);
                 }
@@ -108,7 +116,7 @@ const PasswordReset=()=>{
                                 <Text style={styles.loginText}>Reset</Text>
                             </TouchableOpacity>
                             <View style={styles.signUpView}>
-                                <Text style={styles.signinAccount}>Already have an account? <Text style={styles.signUp}>Sign In</Text></Text>
+                                <Text style={styles.signinAccount}>Already have an account? <Text style={styles.signUp} onPress={() => navigation.navigate('SignIn')}>Sign In</Text></Text>
                             </View>
                         </View>
                     </View>

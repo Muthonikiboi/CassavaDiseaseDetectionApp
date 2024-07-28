@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, ScrollView, Image, View, Text, TextInput, TouchableOpacity, ToastAndroid } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Tabs from "../components/Tabs";
 import { Link } from 'expo-router';
 
 const Signin = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isloggedIn, setIsLoggedIn] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    function handleSubmit() {
+    const handleSubmit = async () => {
 
         if (!email || !password || !email.trim()=== '' || !password.trim()=== '') {
             ToastAndroid.show('Please fill in all fields', ToastAndroid.SHORT);
@@ -22,26 +23,37 @@ const Signin = ({ navigation }) => {
             email: email,
             password,
         }
-        axios
-            .post("https://cassavabackend.onrender.com/api/v1/user/login", userData)
-            .then(res => {
-                // console.log(res.data)
-                if (res.data.status == "success") {
-                    ToastAndroid.show('Log in successful', ToastAndroid.SHORT);
-                    setIsLoggedIn(true)
-                } else {
-                    ToastAndroid.show('Failed to log in. Please check your credentials.', ToastAndroid.SHORT);
-                }
-            })
-            .catch(error => {
-                console.log(error.response.data.message);
-                ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
-            })
+        try {
+            // setLoading(true); // Set loading to true
+            const res = await axios.post("https://cassavabackend.onrender.com/api/v1/user/login", userData);
+            console.log(JSON.stringify(res.data, null, 2));
+
+            if (res.data.status === 'success') {
+                ToastAndroid.show('Logged in successfully!', ToastAndroid.SHORT);
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Tabs' }],
+                });
+                await AsyncStorage.setItem('token', res.data.token);
+                await AsyncStorage.setItem('userEmail', res.data.data.user.email);
+                await AsyncStorage.setItem('id', res.data.data.user._id);
+                await AsyncStorage.setItem('userName', res.data.data.user.name);
+                await AsyncStorage.setItem('userRole', res.data.data.user.role);
+                await AsyncStorage.setItem('isLocked', 'true');
+            } else {
+                ToastAndroid.show('Login failed. Please check your credentials.', ToastAndroid.SHORT);
+            }
+        } catch (error) {
+            console.error(error);
+            ToastAndroid.show('Login failed. Please check your credentials.', ToastAndroid.SHORT);
+        } finally {
+            setLoading(false); // Set loading to false
+        }
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            {isloggedIn ? <Tabs /> : <ScrollView keyboardShouldPersistTaps={'always'}>
+           <ScrollView keyboardShouldPersistTaps={'always'}>
                 <View style={styles.content}>
                     <Image style={styles.loginImage} source={require('../../assets/login.png')} />
                     <View style={styles.ViewContainer}>
@@ -80,7 +92,7 @@ const Signin = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-            </ScrollView>}
+            </ScrollView>
         </SafeAreaView>
     )
 }

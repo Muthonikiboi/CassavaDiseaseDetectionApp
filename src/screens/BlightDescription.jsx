@@ -48,7 +48,7 @@ const BlightDescription = ({navigation}) => {
             <View style={styles.scroll}>
 
                 <View style={styles.titleView}>
-                   <AntDesign name="arrowleft" size={24} marginRight={10} marginLeft={10} color="black" onPress={() => navigation.navigate('Model')}/>
+                   <AntDesign name="arrowleft" size={24} marginRight={10} marginLeft={10} color="black" onPress={() => navigation.navigate('Tabs')}/>
                     <Text style={styles.title}>Cassava Blight Disease</Text>
                     </View>
 

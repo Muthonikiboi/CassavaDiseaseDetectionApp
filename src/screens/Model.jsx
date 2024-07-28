@@ -5,6 +5,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import { useNavigation } from '@react-navigation/native'; // Import navigation hook
 
@@ -13,7 +14,27 @@ const Model = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [predicted, setPredicted] = useState('');
     const [confidence, setConfidence] = useState(null);
+    const [recommend, setRecommendData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [username, setUsername] = useState('');
     const navigation = useNavigation(); // Use navigation hook
+
+    // Fetch user details from AsyncStorage
+     useEffect(() => {
+            const fetchUserDetails = async () => {
+                try {
+                    const username = await AsyncStorage.getItem('userName');
+    
+                    if (username !== null) setUsername(username);
+                } catch (error) {
+                    console.error('Error fetching user details', error);
+                } finally {
+                    setLoading(false); // Set loading to false once the fetching is done
+                }
+            };
+    
+            fetchUserDetails();
+        }, []);
 
     const pickImage = async () => {
         try {
@@ -55,26 +76,88 @@ const Model = () => {
                 const response = await axios(config);
                 console.log(JSON.stringify(response.data, null, 2));
 
-                setPredicted(response.data.Predicted);
-                setConfidence(response.data.Confidence);
+                if (response.data && response.data.Predicted && response.data.Confidence !== undefined) {
+                    console.log(response.data.Predicted.length)
+
+                    setPredicted(response.data.Predicted);
+                    setConfidence(response.data.Confidence);
+
+                    if(response.data.Predicted.length === 26){
+                        try{
+                            const res = await axios.get('https://cassavabackend.onrender.com/api/v1/disease', {
+                                params:{
+                                    diseases: response.data.Predicted,
+                                }
+                            });
+
+                            if (res.data.status === 'success'){
+                                const data = res.data.data.diseases[1];
+                                // console.log(data)
+                                function getRandomItem(array) {
+                                    const randomIndex = Math.floor(Math.random() * array.length);
+                                    return array[randomIndex];
+                                }
+        
+                                const randomItem = getRandomItem(data.treatment);
+                                console.log(randomItem)
+                                setRecommendData(randomItem);
+        
+                            }
+                        }catch(err){
+                            console.log(err)
+                        }
+                    }else if (response.data.Predicted.length === 28){
+                        try{
+                            const res = await axios.get('https://cassavabackend.onrender.com/api/v1/disease', {
+                                params:{
+                                    diseases: response.data.Predicted,
+                                }
+                            });
+
+                            if (res.data.status === 'success'){
+                                const data = res.data.data.diseases[0];
+                                // console.log(data)
+                                function getRandomItem(array) {
+                                    const randomIndex = Math.floor(Math.random() * array.length);
+                                    return array[randomIndex];
+                                }
+        
+                                const randomItem = getRandomItem(data.treatment);
+                                console.log(randomItem)
+                                setRecommendData(randomItem);
+        
+                            }
+                        }catch(err){
+                            console.log(err)
+                        }
+                    } 
+                }
             } else {
                 ToastAndroid.show("You've not selected any image", ToastAndroid.SHORT);
             }
-        } catch (error) {
-            console.error("Error", error);
-        }
+        } catch (err) {
+            if (axios.isAxiosError(err)) {
+              const statusCode = err.response?.status;
+              console.log('Axios error:', err.response?.data || err.message);
+              if (statusCode === 502 || statusCode === 503) {
+                ToastAndroid.show("This is not a cassava leaf. Please try again later.", ToastAndroid.SHORT);
+              } else {
+                ToastAndroid.show("An unexpected error occurred", ToastAndroid.SHORT);
+              }
+            } else {
+              console.error('Non-Axios error:', err);
+              ToastAndroid.show("An unexpected error occurred", ToastAndroid.SHORT);
+            }
+          }
     };
 
-    const navigateToScreen = (screenName) => {
-        setModalVisible(false);
-        navigation.navigate(screenName);
-    };
+const closeModal = () =>{
+    setPredicted('');
+    setConfidence(null);
+    setRecommendData('');
+    setModalVisible(!modalVisible);
+}
 
-    useEffect(() => {
-        if (predicted) {
-            console.log(predicted);
-        }
-    }, [predicted]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -84,23 +167,25 @@ const Model = () => {
                 visible={modalVisible}
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
                 }}
             >
                 <View style={styles.main}>
-                    <Ionicons name="close" size={30} color="white" onPress={() => setModalVisible(!modalVisible)} />
+                    <Ionicons name="close" size={30} color="white" onPress={closeModal} />
                     <View style={styles.modalView}>
                         <Text style={{ fontSize: 30, fontWeight: "bold" }}>Load Your Image</Text>
                         {image && <Image source={{ uri: image }} style={{ width: 300, height: 250, borderRadius: 20 }} />}
                         <Text style={styles.predicts}>Predicted: <Text style={styles.predict}>{predicted}</Text></Text>
                         <Text style={{ fontSize: 13, color: 'red' }}>Confidence: {confidence}</Text>
+                        <Text style={styles.predicts}>Recommendation: <Text style={styles.predict}>{recommend}</Text></Text>
 
-                        {predicted === 'Cassava_Mosaic_Disease(CMD)' && (
-                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MosaicDecription')}>
+                        {predicted === 'Cassava Mosaic Disease (CMD)' && (
+                            <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate('MosaicDecription'); closeModal();}}>
                             <Text style={styles.loginText}>Learn More</Text>
                             </TouchableOpacity>
                         )}
                         {predicted === 'Cassava___bacterial_blight' && (
-                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('BlightDecription')}>
+                            <TouchableOpacity style={styles.button} onPress={() =>{navigation.navigate('BlightDecription'); closeModal();}}>
                                 <Text style={styles.loginText}>Learn More</Text>
                             </TouchableOpacity>
                         )}
@@ -115,7 +200,7 @@ const Model = () => {
             <ScrollView style={styles.scroll}>
                 <View style={styles.view1}>
                     <View style={styles.view2}>
-                        <Text style={styles.hello}>Hello <Text style={[styles.label, styles.name]}>Elizabeth</Text>,</Text>
+                        <Text style={styles.hello}>Hello <Text style={[styles.label, styles.name]}>{username}</Text>,</Text>
                         <Text style={styles.text}>Upload your cassava leaf to get diagnosis and treatment.</Text>
                     </View>
                     <View style={styles.logoView}>
